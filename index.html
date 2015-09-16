@@ -1,0 +1,97 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<title>Drag</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+		<script type="text/javascript" src="js/swfobject.js"></script>
+		<script type="text/javascript">
+			google.load('jquery', '1.2.6');
+			google.load("jqueryui", "1.5.2");
+			google.setOnLoadCallback(function() {
+				swfobject.embedSWF("Drag.swf", "flashContent", "300", "300", "9.0.0");
+				
+				$("#dragZilla a").draggable();
+				$("#dropZilla").droppable({
+					accept: "#dragZilla a",
+					over: function(ev, ui) {
+						sendDraggedToActionScript($(ui.draggable).text());
+						$(ui.draggable).remove();
+					}
+				});
+				
+				jsReady = true;
+			});
+			
+			var jsReady = false;
+
+			function isReady() {
+				return jsReady;
+			}
+
+			function thisMovie(movieName) {
+				if (navigator.appName.indexOf("Microsoft") != -1) {
+					return window[movieName];
+				} else {
+					return document[movieName];
+				}
+			}
+
+			function sendDraggedToActionScript(value) {
+				thisMovie("flashContent").sendToActionScript(value);
+			}
+
+			function sendToJavaScript(value) {
+				//console.log(value);
+			}
+			
+			function dragToJavaScript(value) {
+				$('#dragZilla').append('<a href="#">' + value + '</a>');
+				$("#dragZilla a").draggable();
+			}
+		</script>
+		<style type="text/css">
+			#dragZilla {
+				margin: 0;
+				padding: 0;
+				border: 1px solid #333;
+				background-color: #EEE;
+				width: 300px;
+				margin: 20px 0;
+			}
+			
+			#dragZilla a {
+				display: block;
+				border: 1px solid #AAAAFF;
+				background-color: #CCCCFF;
+				margin: 5px;
+				padding: 10px;
+				width: 200px;
+				color: #000;
+				text-decoration: none;
+				text-align: center;
+				position: relative;
+			}
+			
+			#dropZilla {
+				width: 300px;
+				height: 300px;
+				border: 1px solid #000;
+				background-color: #DDD;
+				display: block;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="dropZilla">
+			<div id="flashContent">
+				<a href="http://www.adobe.com/go/getflashplayer"><img src="http://www.adobe.com/images/shared/download_buttons/get_flash_player.gif" alt="Get Adobe Flash player" /></a>
+			</div>
+		</div>
+		<div id="dragZilla">
+			<a href="#">Item 1</a>
+			<a href="#">Item 2</a>
+			<a href="#">Item 3</a>
+		</div>
+	</body>
+</html>
